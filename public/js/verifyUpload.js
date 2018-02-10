@@ -37,7 +37,7 @@ $('document').ready(function(){
         setTimeout(function(){
             $("#btn-upload").html('Upload');
             $("#btn-upload").prop("disabled",false);
-        }, 6000);
+        }, 10000);
             
     });
     /* validation */
@@ -76,7 +76,7 @@ $('document').ready(function(){
                         $("#error").html('<div class="alert alert-success">'+response+' </div>');
                     });
                     $("#btn-upload").html('Please wait...');
-                    setTimeout(' window.location.href="/coauploader"; ', 5000);
+                    setTimeout(' window.location.href="/coauploader"; ', 3000);
                 } else {
                     $("#error").fadeIn(1000, function(){						
                         $("#error").html('<div class="alert alert-danger">'+response+' </div>'); 

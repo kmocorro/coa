@@ -313,7 +313,7 @@ module.exports = function(app){
                         //  now that it's clean, resolve!
                         resolve(xlf_proposed_obj);
                     } else { // then res to client upload the required file
-                        res.send(JSON.stringify('Error proposed cofa: Upload CofA file with correct template'));
+                        res.send(JSON.stringify('Invalid CoA File Format'));
                     }
 
                 });
@@ -659,7 +659,7 @@ module.exports = function(app){
     app.get('/', function(req, res){
         res.redirect('/coauploader'); // redirect for the meantime
     });
-    
+
     //  admin page 
     //  try nodemailer here
     app.get('/admin', function(req, res){

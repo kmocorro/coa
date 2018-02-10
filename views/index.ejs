@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>  
-    <title>Fab4 Meta</title>
+    <title>Fab4 Meta | CoA Uploader</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
@@ -169,7 +169,7 @@
 
         <!-- Default box -->
         <div class="col-md-4">
-            <div class="box" style="height: 100%;">
+            <div class="box box-primary" style="height: 100%;">
                 <div class="box-header with-border">
                     <h3 class="box-title">Upload CoA file</h3>
         
@@ -191,11 +191,16 @@
                             </div>
 
                         </div>
+
+                        
+                        <div id="error">
+                            <!-- error / success will be shown here -->
+                        </div>
                         
                         <div class="box-body">
                             <h3 class="box-title">Fill out the details:</h3>
 
-                                <div class="header_div" style="padding-bottom:20px;padding-top:10px;">
+                                <div class="header_div" style="padding-bottom:10px;padding-top:10px;">
                                 
                                 <div class="order_no_div" style="padding-bottom:15px;">
                                     <!--onkeypress='return event.charCode >= 48 && event.charCode <= 57'-->
@@ -227,12 +232,8 @@
                                 </div>
                             </div>
 
-                            <div class="submit_div" style="padding-bottom: 20px;">
-                                <button id="btn-upload" class="btn btn-lg btn-primary btn-block" name="Submit" type="Submit" value="Upload" disabled>Upload</button>
-                            </div>
-
-                            <div id="error">
-                                <!-- error / success will be shown here -->
+                            <div class="submit_div" style="padding-bottom: 5px;">
+                                <button id="btn-upload" class="btn btn-lg btn-warning btn-block" name="Submit" type="Submit" value="Upload" disabled>Upload</button>
                             </div>
 
                         </div>
@@ -241,7 +242,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <i>All fields are required.</i>
+                    <small><i>All fields are required.</i></small>
                 </div>
                 <!-- /.box-footer-->
             </div>
