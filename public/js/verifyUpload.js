@@ -30,14 +30,14 @@ $('document').ready(function(){
 
     $('input:file').change('click', function(){
         $("#btn-upload").prop("disabled",true);
-        $("#btn-upload").html('Loading file...');
+        $("#btn-upload").html('Loading excel file...');
         
         $("#xlf").prop("disabled",true);
 
         setTimeout(function(){
             $("#btn-upload").html('Upload');
             $("#btn-upload").prop("disabled",false);
-        }, 4000);
+        }, 6000);
             
     });
     /* validation */
@@ -76,7 +76,7 @@ $('document').ready(function(){
                         $("#error").html('<div class="alert alert-success">'+response+' </div>');
                     });
                     $("#btn-upload").html('Please wait...');
-                    setTimeout(' window.location.href="/upload"; ',5000);
+                    setTimeout(' window.location.href="/coauploader"; ', 5000);
                 } else {
                     $("#error").fadeIn(1000, function(){						
                         $("#error").html('<div class="alert alert-danger">'+response+' </div>'); 

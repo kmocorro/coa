@@ -1,3 +1,5 @@
 # Ignore folder node_module
 node_modules/
 *.vscode/
+public/Admin*
+public/dis*

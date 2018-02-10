@@ -17,7 +17,7 @@ module.exports = function(app){
         let xlf_proposed_obj = [];   //  cleaned obj going to db
         let xlf_barcode_obj = [];   //  "   "   "   "
         
-        if(!post_xlf){  //  post_xlf must have xl data
+        if(!post_xlf || !post_xlf.xlf){  //  post_xlf must have xl data
             res.send(JSON.stringify('Upload the required CofA file'));
         } else {
 
@@ -69,7 +69,7 @@ module.exports = function(app){
 
             function proposed_cofa(){ // promise function for proposed cofa sheet
                 return new Promise(function(resolve, reject){
-        
+                    
                     //  check if the file has proposed cofa sheet
                     if(typeof post_xlf.xlf['PROPOSED CofA'] !== 'undefined' && post_xlf.xlf['PROPOSED CofA'] !== null && post_xlf.xlf['PROPOSED CofA'].length > 0){
     
@@ -315,6 +315,7 @@ module.exports = function(app){
                     } else { // then res to client upload the required file
                         res.send(JSON.stringify('Error proposed cofa: Upload CofA file with correct template'));
                     }
+
                 });
             }
     
@@ -393,9 +394,9 @@ module.exports = function(app){
                                     connection.release();   // release the kraken
                                 });
     
-    
                             }
                         }
+
                         //  send responsed to client
                         res.send(JSON.stringify('Success: File has been uploaded'));
                     });
@@ -656,9 +657,9 @@ module.exports = function(app){
 
     //  index page
     app.get('/', function(req, res){
-        res.redirect('/upload'); // redirect for the meantime
+        res.redirect('/coauploader'); // redirect for the meantime
     });
-
+    
     //  admin page 
     //  try nodemailer here
     app.get('/admin', function(req, res){
@@ -676,19 +677,7 @@ module.exports = function(app){
     });
 
     //  get upload page
-    app.get('/upload', function(req, res){
-
-        /*
-        function querySupplier(){
-            return new Promise(function(resolve, reject){
-
-                
-            });
-
-        }
-        */
-
-
+    app.get('/coauploader', function(req, res){
         //  get the supplier list
         mysqlCloud.poolCloud.getConnection(function(err, connection){
             connection.query({
@@ -703,7 +692,7 @@ module.exports = function(app){
                     }
                 
             // render the page
-            res.render('upload', {supplier_obj});
+            res.render('index', {supplier_obj});
             });
             connection.release(); // always
         });
