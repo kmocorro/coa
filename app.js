@@ -1,8 +1,14 @@
 let express = require('express');
 let app = express();
 
+
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+
 let cookieSession = require('cookie-session');
 let apiController = require('./controllers/apiController');
+let apiSocket = require('./controllers/apiSocket');
 
 let port = process.env.PORT || 9000;
 
@@ -19,5 +25,6 @@ app.use(cookieSession({
 }));
 
 apiController(app);
+apiSocket(io);
 
-app.listen(port);
+server.listen(port);

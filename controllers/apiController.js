@@ -640,6 +640,7 @@ module.exports = function(app){
                                 }
                             connection.release();
                             res.send('Form has been saved!');
+
                             });
                                 
                         } else {
@@ -678,9 +679,36 @@ module.exports = function(app){
         res.redirect('/coauploader'); // redirect for the meantime
     });
 
+    
+    //  main operator's page
     app.get('/bcode/:line', function(req, res){
-        if(req.params.line == '17' || req.params.line == '18'|| req.params.line == '19' || req.params.line == '20' || req.params.line == '21' || req.params.line == '22'  ){
-            res.render('bcode', { line: req.params.line });
+        let param_line = req.params.line;
+
+        if(param_line == '17' || param_line == '18'|| param_line == '19' || param_line == '20' || param_line == '21' || param_line == '22'  ){
+            //  get the consumed bcode list
+            mysqlCloud.poolCloud.getConnection(function(err, connection){
+                connection.query({
+                    sql: 'SELECT * FROM tbl_consumed_barcodes WHERE line= ? ORDER BY upload_date DESC',
+                    values: [param_line]
+                },  function(err, results, fields){
+                    let consumed_obj=[];
+                        for(let i=0; i<results.length;i++){
+                            consumed_obj.push({
+                                consumed_id: results[i].id,
+                                consumed_date:  moment(results[i].upload_date).format('lll'),
+                                consumed_line: results[i].line,
+                                lot_id: results[i].lot_id,
+                                consumed_barcode: results[i].barcode
+                            });
+                        }
+                    
+                // render the page
+                res.render('bcode', { line: req.params.line, consumed_obj});
+                });
+                connection.release(); // always
+            });
+
+            
         } else {
             res.render('404');
         }
@@ -692,7 +720,7 @@ module.exports = function(app){
 
     });
 
-    //  operator's page
+    /*
     app.get('/barcode/:line', function(req, res){
         if(req.params.line == '17' || req.params.line == '18'|| req.params.line == '19' || req.params.line == '20' || req.params.line == '21' || req.params.line == '22'  ){
             res.render('barcode', { line: req.params.line });
@@ -701,24 +729,29 @@ module.exports = function(app){
         }
        
     });
+    */
 
     //  get upload page
     app.get('/coauploader', function(req, res){
-        //  get the supplier list
+
+        //  get the consumed bcode list
         mysqlCloud.poolCloud.getConnection(function(err, connection){
             connection.query({
-                sql: 'SELECT * FROM tbl_supplier_list'
+                sql: 'SELECT * FROM tbl_consumed_barcodes ORDER BY upload_date DESC'
             },  function(err, results, fields){
-                let supplier_obj=[];
+                let consumed_obj=[];
                     for(let i=0; i<results.length;i++){
-                        supplier_obj.push({
-                            supplier_id: results[i].supplier_id,
-                            supplier_name:  results[i].supplier_name
+                        consumed_obj.push({
+                            consumed_id: results[i].id,
+                            consumed_date:  moment(results[i].upload_date).format('lll'),
+                            consumed_line: results[i].line,
+                            lot_id: results[i].lot_id,
+                            consumed_barcode: results[i].barcode
                         });
                     }
                 
             // render the page
-            res.render('index', {supplier_obj});
+            res.render('index', {consumed_obj});
             });
             connection.release(); // always
         });
