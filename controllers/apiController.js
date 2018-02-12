@@ -551,7 +551,7 @@ module.exports = function(app){
                                 values: [cleaned_post_barcode[0].bundle_barcode[i]]
                             },  function(err, results, fields){
 
-                                if(typeof results[0] != 'undefined' || results[0] != null){
+                                if(typeof results != 'undefined' && results != null && results.length > 0){
                                     x++; // increment maybe?
 
                                     doesExist_obj.push(
@@ -560,12 +560,14 @@ module.exports = function(app){
 
                                     if(x == cleaned_post_barcode[0].bundle_barcode.length){ // resolve if reached the length
                                         resolve(doesExist_obj);
+                                       // console.log(doesExist_obj);
                                     }
 
                                 } else {
 
                                     resolve(doesExist_obj);
-                                }
+                                   // console.log(doesExist_obj);
+                                } 
 
                             });
                         }
@@ -586,11 +588,17 @@ module.exports = function(app){
 
                                 for(let i=0;i<doesExist_obj.length;i++){
                                     connection.query({
-                                        sql: 'SELECT DISTINCT(barcode) FROM tbl_consumed_barcodes WHERE barcode = ?',
+                                        sql: 'SELECT DISTINCT(barcode) as barcode FROM tbl_consumed_barcodes WHERE barcode = ?',
                                         values: [doesExist_obj[i]]
                                     },  function(err, results, fields){
 
-                                        if(typeof results[0] == 'undefined' || results[0] == null){
+                                        if(typeof results[0] != 'undefined' && results[0] != null){
+                                            
+                                            reject(doesExist_obj[i] + ' Stack ID is already used');
+                                            //res.send();
+                                            
+                                        } else {
+                                            // good to go
                                             x++;
 
                                             doesNotUsedAlready_obj.push(
@@ -600,11 +608,8 @@ module.exports = function(app){
                                             if(x == doesExist_obj.length){
                                                 resolve(doesNotUsedAlready_obj);
                                             }
-
-                                        } else {
-
-                                            resolve(doesNotUsedAlready_obj);
                                         }
+                                        
                                     });
                                 }
 
@@ -616,6 +621,7 @@ module.exports = function(app){
 
                     
                     return doesNotUsedAlready().then(function(doesNotUsedAlready_obj){
+
                         if(doesNotUsedAlready_obj.length == doesExist_obj.length){
                             
                             mysqlCloud.poolCloud.getConnection(function(err, connection){
@@ -625,7 +631,7 @@ module.exports = function(app){
                                         values: [cleaned_post_barcode[0].consume_date, cleaned_post_barcode[0].lot_id, doesNotUsedAlready_obj[i]]
                                     },  function(err, results, fields){
                                     });
-
+    
                                     connection.query({
                                         sql: 'INSERT INTO tbl_consumed_barcodes SET upload_date = ?, line = ?, lot_id = ?, barcode = ?',
                                         values: [cleaned_post_barcode[0].consume_date, cleaned_post_barcode[0].line, cleaned_post_barcode[0].lot_id, doesNotUsedAlready_obj[i]]
@@ -635,10 +641,22 @@ module.exports = function(app){
                             connection.release();
                             res.send('Form has been saved!');
                             });
-                            
+                                
                         } else {
-                            res.send('Stack ID already used. Try different Stack ID.');
+                            let x=0;
+
+                            for(let i=0; i<doesNotUsedAlready_obj.length; i++){
+                                x++;
+                                
+                                if(x == doesNotUsedAlready_obj.length){
+                                    res.send( doesNotUsedAlready_obj + ' Stack ID already used.');
+                                }
+                                
+                            }
                         }
+                        
+                    }).catch(function(reject){
+                        res.send(reject);
                     });
                     
                 } else {
