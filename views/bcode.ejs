@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="../dist/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="../dist/ionicons/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../dist/datatables/css/dataTables.bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
     <!-- Theme skin -->
@@ -273,7 +275,9 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
+                    <table id="savedlogs" class="table table-hover">
+                      
+                      <thead>
                         <tr>
                         <th>ID</th>
                         <th>Consumed Date</th>
@@ -281,6 +285,8 @@
                         <th>Lot ID</th>
                         <th>Barcode</th>
                         </tr>
+                        
+                      </thead>
                         <% for (let i=0; i < consumed_obj.length; i++) {  %>
                         <tr>
                         <td><%= consumed_obj[i].consumed_id %></td>
@@ -521,6 +527,14 @@
 <script src="../dist/js/bootstrap.min.js"></script>-->
 <script src="../dist/js/jquery-ui.min.js"></script>
 <script src="../dist/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- DataTables -->
+<script src="../dist/datatables/js/jquery.dataTables.min.js"></script>
+<script src="../dist/datatables/js/dataTables.bootstrap.min.js"></script>
+
+
+
 <script src="../dist/js/fastclick.js"></script>
 <script src="../dist/js/adminlte.min.js"></script>
 <script src='../dist/js/socket.io.js'></script>
@@ -531,6 +545,44 @@
             $('#qty').focus();
             return false; // block form from being submitted yet
         }
+    });
+
+    $('#qty').keydown(function(e){
+      if ($('#qty').val() == '500'){
+        
+        if(e.keyCode == 13){
+          $('#stack5_id1').focus();
+          return false
+        }
+      } else if($('#qty').val() == '400'){
+        
+        if(e.keyCode == 13){
+          $('#stack4_id1').focus();
+          return false
+        }
+      } else if ($('#qty').val() == '300'){
+
+        if(e.keyCode == 13){
+          $('#stack3_id1').focus();
+          return false
+        }
+      } else if ($('#qty').val() == '200'){
+
+        if(e.keyCode == 13){
+          $('#stack2_id1').focus();
+          return false
+        }
+      } else if ($('#qty').val() == '100'){
+        if(e.keyCode == 13){
+          $('#stack1_id1').focus();
+          return false
+        }
+      } else if ($('#qty').val() == '1') {
+        if(e.keyCode == 13){
+          $('#stack1_id1').focus();
+          return false
+        }
+      }
     });
 
     //  stack 5
@@ -644,7 +696,20 @@
 
   });
 </script>
-
 -->
+
+<script>
+  $(function () {
+    //$('#example1').DataTable();
+    $('#savedlogs').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    });
+  });
+</script>
 </body>
 </html>

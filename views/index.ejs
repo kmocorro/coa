@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="../dist/font-awesome/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="../dist/ionicons/css/ionicons.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="../dist/datatables/css/dataTables.bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
     <!-- Theme skin -->
@@ -256,7 +258,7 @@
 
             <!-- Log Box-->
             <div class="col-md-8">
-                <div class="box box-danger" style="height: 100%;">
+                <div class="box box-default" style="height: 100%;">
                     <div class="box-header with-border">
                         <h3 class="box-title" style="padding-bottom:12px;">Consumed Stack IDs</h3>
             
@@ -270,7 +272,8 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body table-responsive no-padding">
-                    <table class="table table-hover">
+                    <table id="consumed" class="table table-hover">
+                        <thead>
                         <tr>
                         <th>ID</th>
                         <th>Consumed Date</th>
@@ -278,6 +281,7 @@
                         <th>Lot ID</th>
                         <th>Barcode</th>
                         </tr>
+                        </thead>
                         <% for (let i=0; i < consumed_obj.length; i++) {  %>
                         <tr>
                         <td><%= consumed_obj[i].consumed_id %></td>
@@ -520,9 +524,17 @@
 <script src="../dist/js/bootstrap.min.js"></script>-->
 <script src="../dist/js/jquery-ui.min.js"></script>
 <script src="../dist/js/jquery.slimscroll.min.js"></script>
+
+
+<!-- DataTables -->
+<script src="../dist/datatables/js/jquery.dataTables.min.js"></script>
+<script src="../dist/datatables/js/dataTables.bootstrap.min.js"></script>
+
+
 <script src="../dist/js/fastclick.js"></script>
 <script src="../dist/js/adminlte.min.js"></script>
 <script src='../dist/js/socket.io.js'></script>
+
 
 <script type="text/javascript" src="./js/shim.min.js"></script>
 <script type="text/javascript" src="./js/xlsx.full.min.js"></script>
@@ -627,6 +639,19 @@
     })();
 </script>
 
+<script>
+  $(function () {
+    //$('#example1').DataTable();
+    $('#consumed').DataTable({
+      'paging'      : true,
+      'lengthChange': true,
+      'searching'   : true,
+      'ordering'    : true,
+      'info'        : true,
+      'autoWidth'   : false
+    });
+  });
+</script>
 
 <!--<script>
   $(function () {
