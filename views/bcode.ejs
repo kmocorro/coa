@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>  
-    <title>Fab4 Meta | CoA Uploader</title>
+    <title>Fab4 Meta | Line <%= line %></title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
@@ -21,15 +21,15 @@
 
     <!-- Uploader form-->
 
-    <link rel="stylesheet" type="text/css" href="./style/bootstrap-datetimepicker.css">
-    <link rel="stylesheet" type="text/css" href="./src/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../style/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" type="text/css" href="../src/bootstrap/css/bootstrap.min.css">
     
-    <script type="text/javascript" src="./src/popper/popper.min.js"></script>
-    <script type="text/javascript" src="./src/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="./js/validation.min.js"></script>
-    <script type="text/javascript" src="./js/verifyUpload.js"></script>
-    <script type="text/javascript" src="./js/moment.js"></script>
-    <script type="text/javascript" src="./js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="../src/popper/popper.min.js"></script>
+    <script type="text/javascript" src="../src/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/validation.min.js"></script>
+    <script type="text/javascript" src="../js/verifyBarcode.js"></script>
+    <script type="text/javascript" src="../js/moment.js"></script>
+    <script type="text/javascript" src="../js/bootstrap-datetimepicker.js"></script>
 
 </head>
 
@@ -127,6 +127,7 @@
             <li><a href="#"><i class="fa fa-circle-o"></i> WIP & Outs </a></li>
           </ul>
         </li> -->
+        <!--
         <li class="active treeview">
           <a href="#"  style="text-decoration: none;">
             <i class="fa fa-database"></i>
@@ -139,7 +140,7 @@
             <li><a href="/coauploader" style="text-decoration: none;"><i class="fa fa-circle-o"></i> CoA Uploader</a></li>
           </ul>
         </li>
-        
+        -->
         
         <li class="header">ABOUT</li>
         <li><a href="#" style="text-decoration: none;"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
@@ -154,12 +155,12 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Certificate of Analysis
-        <small>uploader</small>
+        Stack  
+        <small>barcode uploader</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Uploader</li>
+        <li class="active">Barcode</li>
       </ol>
     </section>
 
@@ -170,78 +171,80 @@
         <div class="col-md-4">
             <div class="box box-primary" style="height: 100%;">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Upload CoA file</h3>
+                    <h3 class="box-title">LINE <%= line %></h3>
         
                     <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
+                    <!--<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                             title="Collapse">
                         <i class="fa fa-minus"></i></button>
-                    <!--<button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
                         <i class="fa fa-times"></i></button>
                     </div>-->
                 </div>
                 <div class="box-body">
-                    <form action="" method="post" id="upload_form" name="upload_form" class="form-upload">
+                    <form action="" method="post" id="barcode_form" name="barcode_form" class="form-upload">
 
-                        <div class="box-header with-border">
+                        <div class="header_div" style="padding-bottom:10px;">
+                            <div class="liner">
+                                <input type="text" class="form-control" id="line" name="line" value='<%= line %>'/>
+                            </div>
+                            <div class="lot_id_div">
+                                <!--onkeypress='return event.charCode >= 48 && event.charCode <= 57'-->
+                                <h5>Lot ID:</h5> 
+                                <input type="text" class="form-control" id="lot_id" name="lot_id" autofocus placeholder="Wafer Lot ID"/>
+                            </div>
+                            <div class="qty_div" style="padding-bottom:10px;">
+                                <h5>Quantity:</h5> 
+                                <input type="text" class="form-control" id="qty" name="qty" onkeypress='return event.charCode >= 48 && event.charCode <= 57' placeholder="Lot size"/>
+                            </div>
                             
-                            <div class="xlf_div" style="padding-bottom: 10px;">
-                                <input type="file" name="xlfile" id="xlf" />
+                            <div id="error">
+                                <!-- error / success will be shown here -->
                             </div>
 
-                        </div>
-
-                        
-                        <div id="error">
-                            <!-- error / success will be shown here -->
-                        </div>
-                        
-                        <div class="box-body">
-                            <h3 class="box-title">Fill out the details:</h3>
-
-                                <div class="header_div" style="padding-bottom:10px;padding-top:10px;">
-                                
-                                <div class="order_no_div" style="padding-bottom:15px;">
-                                    <!--onkeypress='return event.charCode >= 48 && event.charCode <= 57'-->
-                                    <small>Invoice number:</small>
-                                    <input type="text" class="form-control" id="order_no" name="order_no" placeholder="Invoice number"  data-validation="length alphanumeric" data-validation-length="min4"/>
+                            <div class="stacks">
+                                <div class="stackOf5">
+                                    <h5>Scan 5 stack IDs</h5>
+                                    <input type="text" class="form-control" id="stack5_id1" name="stack5_id1"  placeholder="Stack ID"/>
+                                    <input type="text" class="form-control" id="stack5_id2" name="stack5_id2"  placeholder="Stack ID"/>
+                                    <input type="text" class="form-control" id="stack5_id3" name="stack5_id3"  placeholder="Stack ID"/>
+                                    <input type="text" class="form-control" id="stack5_id4" name="stack5_id4"  placeholder="Stack ID"/>
+                                    <input type="text" class="form-control" id="stack5_id5" name="stack5_id5"  placeholder="Stack ID"/>
                                 </div>
-
-                                <small>Delivery date:</small>
-                                <div class='input-group date' name='datetimepicker1' id='datetimepicker1' style="padding-bottom:15px;">
-
-                                    <input type='text' class="form-control" id="delivery_date" name="delivery_date" placeholder="Delivery date"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                    <script type="text/javascript">
-                                        $(function () {
-                                            $('#datetimepicker1').datetimepicker();
-                                        });
-                                    </script>
+                                <div class="stackOf4">
+                                    <h5>Scan 4 stack IDs</h5>
+                                    <input type="text" class="form-control" id="stack4_id1" name="stack4_id1"  placeholder="Stack ID"/>
+                                    <input type="text" class="form-control" id="stack4_id2" name="stack4_id2"  placeholder="Stack ID"/>
+                                    <input type="text" class="form-control" id="stack4_id3" name="stack4_id3"  placeholder="Stack ID"/>
+                                    <input type="text" class="form-control" id="stack4_id4" name="stack4_id4"  placeholder="Stack ID"/>
                                 </div>
-                                <div class="supplier_id" class="supplier_id" id="supplier_id" name="supplier_id" style="padding-bottom:1px;">
-                                    <!--use ejs here from supplier list table for select input-->
-                                    <small>Supplier ID:</small>
-                                    <select class="form-control" id="supplier_id" name="supplier_id">
-                                        <option value="TZS">
-                                            TZS
-                                        </option>
-                                    </select>
+                                <div class="stackOf3">
+                                    <h5>Scan 3 stack IDs</h5>
+                                    <input type="text" class="form-control" id="stack3_id1" name="stack3_id1"  placeholder="Stack ID"/>
+                                    <input type="text" class="form-control" id="stack3_id2" name="stack3_id2"  placeholder="Stack ID"/>
+                                    <input type="text" class="form-control" id="stack3_id3" name="stack3_id3"  placeholder="Stack ID"/>
+                                </div>
+                                <div class="stackOf2">
+                                    <h5>Scan 2 stack IDs</h5>
+                                    <input type="text" class="form-control" id="stack2_id1" name="stack2_id1"  placeholder="Stack ID"/>
+                                    <input type="text" class="form-control" id="stack2_id2" name="stack2_id2"  placeholder="Stack ID"/>
+                                </div>
+                                <div class="stackOf1">
+                                    <h5>Scan 1 stack ID</h5>
+                                    <input type="text" class="form-control" id="stack1_id1" name="stack1_id1"  placeholder="Stack ID"/>
                                 </div>
                             </div>
-
-                            <div class="submit_div" style="padding-bottom: 5px;">
-                                <button id="btn-upload" class="btn btn-lg btn-warning btn-block" name="Submit" type="Submit" value="Upload" disabled>Upload</button>
-                            </div>
-
+                            
                         </div>
-                          
-                    </form> 
+                        <hr>
+                        <div class="submit_div" style="padding-bottom: 20px;">
+                            <button id="btn-barcode" class="btn btn-lg btn-warning btn-block" name="Submit" type="Submit" value="Save">Save</button>
+                        </div>
+                    </form>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <small style="float:right"><i>All details are required.</i></small>
+                    <small style="float:right"><i>All fields are required.</i></small>
                 </div>
                 <!-- /.box-footer-->
             </div>
@@ -470,107 +473,93 @@
 <script src="../dist/js/adminlte.min.js"></script>
 <script src='../dist/js/socket.io.js'></script>
 
-<script type="text/javascript" src="./js/shim.min.js"></script>
-<script type="text/javascript" src="./js/xlsx.full.min.js"></script>
-<script>
-    var X = XLSX;
-    var XW = {
-	/* worker message */
-	msg: 'xlsx',
-	/* worker scripts */
-	worker: './js/xlsxworker.js'
-    };
-    var global_wb;
-    var outputJSON;
-    
-    var process_wb = (function() {
-	var OUT = document.getElementById('out');
-    var HTMLOUT = document.getElementById('htmlout');
-    
-        var to_json = function to_json(workbook) {
-            var result = {};
-            //var result = [];
-            workbook.SheetNames.forEach(function(sheetName) {
-                var roa = X.utils.sheet_to_json(workbook.Sheets[sheetName], {header:1});
-                if(roa.length) result[sheetName] = roa;
-            });
-            //return JSON.stringify(result, 2, 2);
-            return result;
-        };
-    
-        return function process_wb(wb) {
-            global_wb = wb;
-            outputJSON = "";
-            switch(get_format()) {
-              /*  case "form": output = to_fmla(wb); break;
-                case "html": output = to_html(wb); break;
-                case "json": output = to_json(wb); break; */
-                default: outputJSON = to_json(wb);
-            }
-            console.log(outputJSON);
-            
-            
-            //if(OUT.innerText === undefined) OUT.textContent = output;
-            //else OUT.innerText = output;
-            //if(typeof console !== 'undefined') console.log("output", new Date());
-        };
-    })();
-
-	var get_format = (function() {
-        //var radios = document.getElementsByName( "format" );
-        var radios = "JSON";
-		return function() {
-			for(var i = 0; i < radios.length; ++i) if(radios[i].checked || radios.length === 1) return radios[i].value;
-		};
-    })();
-    
-    var do_file = (function() {
-        var rABS = typeof FileReader !== "undefined" && (FileReader.prototype||{}).readAsBinaryString;
-        var domrabs = document.getElementsByName("userabs")[0];
-    //    if(!rABS) domrabs.disabled = !(domrabs.checked = false);
-
-        var use_worker = typeof Worker !== 'undefined';
-        var domwork = document.getElementsByName("useworker")[0];
-    //    if(!use_worker) domwork.disabled = !(domwork.checked = false);
-
-        var xw = function xw(data, cb) {
-            var worker = new Worker(XW.worker);
-            worker.onmessage = function(e) {
-                switch(e.data.t) {
-                    case 'ready': break;
-                    case 'e': console.error(e.data.d); break;
-                    case XW.msg: cb(JSON.parse(e.data.d)); break;
-                }
-            };
-            worker.postMessage({d:data,b:rABS?'binary':'array'});
-        };
-
-        return function do_file(files) {
-            //rABS = domrabs.checked;
-            //use_worker = domwork.checked;
-            var f = files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                if(typeof console !== 'undefined'); //console.log("onload", new Date(), rABS, use_worker)
-                var data = e.target.result;
-                if(!rABS) data = new Uint8Array(data);
-                if(use_worker) xw(data, process_wb);
-                else process_wb(X.read(data, {type: rABS ? 'binary' : 'array'}));
-            };
-            if(rABS) reader.readAsBinaryString(f);
-            else reader.readAsArrayBuffer(f);
-        };
-    })();
-
-    (function(){
-        var xlf = document.getElementById('xlf');
-        if(!xlf.addEventListener) return;
-
-        function handleFile(e) {
-            do_file(e.target.files);
+<script type="text/javascript"> // tabber
+    $('#lot_id').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+            $('#qty').focus();
+            return false; // block form from being submitted yet
         }
-        xlf.addEventListener('change', handleFile, false);
-    })();
+    });
+
+    //  stack 5
+    $('#stack5_id1').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+            $('#stack5_id2').focus();
+            return false; // block form from being submitted yet
+        }
+    });
+
+    $('#stack5_id2').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+            $('#stack5_id3').focus();
+            return false; // block form from being submitted yet
+        }
+    });
+
+    $('#stack5_id3').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+            $('#stack5_id4').focus();
+            return false; // block form from being submitted yet
+        }
+    });
+
+    $('#stack5_id4').keydown(function(e){
+        if (e.keyCode == 13) {
+            $('#stack5_id5').focus();
+            return false; // block form from being submitted yet
+        }
+    });
+
+    // stack 4
+    $('#stack4_id1').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+            $('#stack4_id2').focus();
+            return false; // block form from being submitted yet
+        }
+    });
+
+    $('#stack4_id2').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+            $('#stack4_id3').focus();
+            return false; // block form from being submitted yet
+        }
+    });
+
+    $('#stack4_id3').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+            $('#stack4_id4').focus();
+            return false; // block form from being submitted yet
+        }
+    });
+
+    // stack 3
+    $('#stack3_id1').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+            $('#stack3_id2').focus();
+            return false; // block form from being submitted yet
+        }
+    });
+
+    $('#stack3_id2').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+            $('#stack3_id3').focus();
+            return false; // block form from being submitted yet
+        }
+    });
+
+    // stack 2
+    $('#stack2_id1').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+            $('#stack2_id2').focus();
+            return false; // block form from being submitted yet
+        }
+    });
+
+    // stack 1
+    $('#stack1_id1').keydown(function(e){
+        if (e.keyCode == 13) { // barcode scanned!
+        }
+    });
 </script>
 </body>
 </html>

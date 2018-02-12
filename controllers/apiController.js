@@ -609,7 +609,7 @@ module.exports = function(app){
                                                 resolve(doesNotUsedAlready_obj);
                                             }
                                         }
-                                        
+
                                     });
                                 }
 
@@ -676,6 +676,14 @@ module.exports = function(app){
     //  index page
     app.get('/', function(req, res){
         res.redirect('/coauploader'); // redirect for the meantime
+    });
+
+    app.get('/bcode/:line', function(req, res){
+        if(req.params.line == '17' || req.params.line == '18'|| req.params.line == '19' || req.params.line == '20' || req.params.line == '21' || req.params.line == '22'  ){
+            res.render('bcode', { line: req.params.line });
+        } else {
+            res.render('404');
+        }
     });
 
     //  admin page 

@@ -137,7 +137,7 @@ $('document').ready(function(){
                         $("#error").html('<div class="alert alert-success">'+response+' </div>');
                     });
                     $("#btn-barcode").html('Please wait...');
-                    setTimeout(' window.location.href="/barcode/17"; ',3000);
+                    setTimeout(' window.location.reload(true); ',3000);
                 } else {
                     $("#error").fadeIn(1000, function(){		
                         $("#qty").val('');
