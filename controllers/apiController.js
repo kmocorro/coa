@@ -688,7 +688,7 @@ module.exports = function(app){
             //  get the consumed bcode list
             mysqlCloud.poolCloud.getConnection(function(err, connection){
                 connection.query({
-                    sql: 'SELECT * FROM tbl_consumed_barcodes WHERE line= ? ORDER BY upload_date DESC',
+                    sql: 'SELECT * FROM tbl_consumed_barcodes WHERE line= ? ORDER BY id ASC',
                     values: [param_line]
                 },  function(err, results, fields){
                     let consumed_obj=[];
