@@ -622,39 +622,72 @@ module.exports = function(app){
                     
                     return doesNotUsedAlready().then(function(doesNotUsedAlready_obj){
 
-                        if(doesNotUsedAlready_obj.length == doesExist_obj.length){
+                        function runCardStatus(){ // verify if runcard is already used
+                            return new Promise(function(resolve, reject){
+
+                                mysqlCloud.poolCloud.getConnection(function(err, connection){
+
+                                    connection.query({
+                                        sql: 'SELECT DISTINCT(lot_id) as lot_id FROM tbl_consumed_barcodes WHERE lot_id =?',
+                                        values: [post_barcode.lot_id]
+                                    },  function(err, results, fields){
+
+                                        if(typeof results[0] != 'undefined' && results[0] != null){
+                                            
+                                            reject(post_barcode.lot_id + ' is already used');
+                                            
+                                        } else {
+
+                                            if(doesNotUsedAlready_obj.length == doesExist_obj.length){
                             
-                            mysqlCloud.poolCloud.getConnection(function(err, connection){
-                                for(let i=0;i<doesNotUsedAlready_obj.length;i++){
-                                    connection.query({
-                                        sql: 'UPDATE tbl_ingot_lot_barcodes SET consume_date = ?, lot_id = ? WHERE bundle_barcode = ?',
-                                        values: [cleaned_post_barcode[0].consume_date, cleaned_post_barcode[0].lot_id, doesNotUsedAlready_obj[i]]
-                                    },  function(err, results, fields){
+                                                mysqlCloud.poolCloud.getConnection(function(err, connection){
+                                                    for(let i=0;i<doesNotUsedAlready_obj.length;i++){
+                                                        connection.query({
+                                                            sql: 'UPDATE tbl_ingot_lot_barcodes SET consume_date = ?, lot_id = ? WHERE bundle_barcode = ?',
+                                                            values: [cleaned_post_barcode[0].consume_date, cleaned_post_barcode[0].lot_id, doesNotUsedAlready_obj[i]]
+                                                        },  function(err, results, fields){
+                                                        });
+                        
+                                                        connection.query({
+                                                            sql: 'INSERT INTO tbl_consumed_barcodes SET upload_date = ?, line = ?, lot_id = ?, barcode = ?',
+                                                            values: [cleaned_post_barcode[0].consume_date, cleaned_post_barcode[0].line, cleaned_post_barcode[0].lot_id, doesNotUsedAlready_obj[i]]
+                                                        },  function(err, results, fields){
+                                                        });
+                                                    }
+                                                connection.release();
+                                                res.send('Form has been saved!');
+                    
+                                                });
+                                                    
+                                            } else {
+                                                let x=0;
+                    
+                                                for(let i=0; i<doesNotUsedAlready_obj.length; i++){
+                                                    x++;
+                                                    
+                                                    if(x == doesNotUsedAlready_obj.length){
+                                                        res.send( doesNotUsedAlready_obj + ' Stack ID already used.');
+                                                    }
+                                                    
+                                                }
+                                            }
+
+                                        }
+
                                     });
-    
-                                    connection.query({
-                                        sql: 'INSERT INTO tbl_consumed_barcodes SET upload_date = ?, line = ?, lot_id = ?, barcode = ?',
-                                        values: [cleaned_post_barcode[0].consume_date, cleaned_post_barcode[0].line, cleaned_post_barcode[0].lot_id, doesNotUsedAlready_obj[i]]
-                                    },  function(err, results, fields){
-                                    });
-                                }
-                            connection.release();
-                            res.send('Form has been saved!');
+
+                                });
 
                             });
-                                
-                        } else {
-                            let x=0;
-
-                            for(let i=0; i<doesNotUsedAlready_obj.length; i++){
-                                x++;
-                                
-                                if(x == doesNotUsedAlready_obj.length){
-                                    res.send( doesNotUsedAlready_obj + ' Stack ID already used.');
-                                }
-                                
-                            }
                         }
+
+                        return runCardStatus().then(function(){
+
+                        }).catch(function(reject){
+                            res.send(reject);
+                        });
+
+                        
                         
                     }).catch(function(reject){
                         res.send(reject);
