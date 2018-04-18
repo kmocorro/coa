@@ -802,13 +802,13 @@ module.exports = function(app){
             function uploadHistory(){
                 return new Promise(function(resolve, reject){
                     connection.query({
-                        sql: 'SELECT id, delivery_date, order_no FROM tbl_ingot_lot_barcodes GROUP BY order_no ORDER BY id DESC'
+                        sql: 'SELECT id, upload_time, order_no FROM tbl_ingot_lot_barcodes GROUP BY order_no ORDER BY id DESC'
                     }, function(err, results, fields){
                         let uploaded_history = [];
                             for(let i=0; i<results.length;i++){
                                 uploaded_history.push({
                                     uploaded_history_id: results[i].id,
-                                    uploaded_history_date: results[i].delivery_date,
+                                    uploaded_history_date: results[i].upload_time,
                                     uploaded_history_order_no: results[i].order_no
                                 });
                             }
@@ -816,15 +816,34 @@ module.exports = function(app){
                     });
                 });
             }
+
+            function supplierList(){
+                return new Promise(function(resolve, reject){
+                    connection.query({
+                        sql: 'SELECT supplier_id, supplier_name FROM tbl_supplier_list'
+                    }, function(err, results, fields){
+                        let supplier_list = [];
+                            for(let i=0; i<results.length;i++){
+                                supplier_list.push({
+                                    supplier_id: results[i].supplier_id,
+                                    supplier_name: results[i].supplier_name
+                                });
+                            }
+                        resolve(supplier_list);
+                    })
+                });
+            }
             
             consumedBarcodes().then(function(consumed_obj){
                 return uploadHistory().then(function(uploaded_history){
+                    return supplierList().then(function(supplier_list){
+                        //console.log(consumed_obj, uploaded_history);
                     
+                        // render the page
+                        res.render('index', {consumed_obj, uploaded_history, supplier_list});
+                    });
 
-                    //console.log(consumed_obj, uploaded_history);
                     
-                // render the page
-                res.render('index', {consumed_obj, uploaded_history});
 
                 connection.release(); // always
                 });

@@ -233,9 +233,11 @@
                                         <!--use ejs here from supplier list table for select input-->
                                         <small>Supplier ID:</small>
                                         <select class="form-control" id="supplier_id" name="supplier_id">
-                                            <option value="1001">
-                                                TZS
+                                          <% for (let i=0; i < supplier_list.length; i++ ) { %>
+                                            <option value="<%= supplier_list[i].supplier_id %>">
+                                                <%= supplier_list[i].supplier_name %>
                                             </option>
+                                          <% } %>
                                         </select>
                                     </div>
                                 </div>
